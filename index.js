@@ -4,7 +4,7 @@ const axios = require('axios').default;
 async function getTotalPriceInBaseCurrency(groceryList, currency, date) {
     // console.log(groceryList)
     let groceryItemPattern = RegExp(/(.*)\w+/gm);
-    groceryList = groceryList.replace("$", "USD").replace("€", "EUR").replace("₹", "INR").replace("£", "GBP").replace(",", "").match(groceryItemPattern)
+    groceryList = groceryList.replace(RegExp(/[$]/gm), "USD").replace(RegExp(/[€]/gm), "EUR").replace(RegExp(/[₹]/gm), "INR").replace(RegExp(/[£]/gm), "GBP").replace(RegExp(/,/gm), "").match(groceryItemPattern)
     console.log(groceryList)
     let currencyPattern = RegExp(/([A-Z]{3} ?)\d?\w+/gm) //group0 selects currency only
     let detailedGroceryList = [];
@@ -46,3 +46,10 @@ cashew nuts CHF48
 4 motorcycles IDR 2,600,000`, "AUD", '2020-02-16').then((v)=>console.log(v))
 
 // should return 1403.99 as a float
+getTotalPriceInBaseCurrency(`apples $16.00
+orange juice €4
+rice packets ₹700
+nut packets ₹1500
+Washing machine AUD1,286.22
+cashew nuts CHF48
+4 motorcycles IDR 2,600,000`, "AUD", '2020-02-16').then((total)=>console.log(total));
